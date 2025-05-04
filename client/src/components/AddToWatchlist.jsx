@@ -26,10 +26,10 @@ const AddToWatchlist = () => {
     try {
       await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/watchlist`,
+        formData,
         {
           withCredentials: true,
-        },
-        formData
+        }
       );
 
       // Reset form
