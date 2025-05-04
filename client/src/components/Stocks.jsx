@@ -15,7 +15,10 @@ const Stocks = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/stocks`
+        `${import.meta.env.VITE_API_BASE_URL}/stocks`,
+        {
+          withCredentials: true,
+        }
       );
       setStocks(response.data);
       setError(null);
