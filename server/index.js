@@ -10,11 +10,33 @@ connectDB();
 
 // middleware
 
+const allowedOrigins = [
+  "https://p1-stock-market-mern.vercel.app",
+  /\.vercel\.app$/, // Allows all Vercel preview deployments
+  "http://localhost:5173", // For local development
+];
+
 const corsOptions = {
-  origin: process.env.FRONTEND_ORIGIN,
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    // Check if the origin matches any allowed pattern
+    if (
+      allowedOrigins.some((pattern) => {
+        return typeof pattern === "string"
+          ? origin === pattern
+          : pattern.test(origin);
+      })
+    ) {
+      return callback(null, true);
+    }
+
+    callback(new Error("Not allowed by CORS"));
+  },
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
-  optionSuccessStatus: 200,
+  optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
